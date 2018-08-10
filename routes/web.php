@@ -15,4 +15,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('headline', 'MainController@headline');
+Route::post('headline', 'MainController@headline');
+ROute::post('news', 'MainController@news');
