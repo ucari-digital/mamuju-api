@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Model\Analytics;
 use App\Model\Komentar;
+use App\User;
 use Illuminate\Http\Request;
 use App\Helper\Response;
 use App\Model\Berita;
@@ -47,6 +48,16 @@ class MainController extends Controller
             }
 
             $data = Analytics::where('berita_id', $id)->count();
+            return Response::json($data, 'success fetch query', 'success', 200);
+        } catch (\Exception $e) {
+            return Response::json($e->getMessage(), 'Terjadi Kesahalan', 'failed', 500);
+        }
+    }
+
+    public function profil_get($role, $status)
+    {
+        try {
+            $data = User::where('role', $role)->where('status', $status)->orderBy('created_at', 'DESC')->get();
             return Response::json($data, 'success fetch query', 'success', 200);
         } catch (\Exception $e) {
             return Response::json($e->getMessage(), 'Terjadi Kesahalan', 'failed', 500);
