@@ -16,3 +16,5 @@ Route::get('/', function () {
 });
 
 Route::get('headline', 'MainController@headline');
+Route::get('komentar/{id}', 'MainController@komentar');
+Route::get('analytics/{id}', 'MainController@analytics');
