@@ -16,4 +16,7 @@ Route::get('/', function () {
 });
 
 Route::post('headline', 'MainController@headline');
-ROute::post('news', 'MainController@news');
+Route::post('news', 'MainController@news');
+Route::get('komentar/{id}', 'MainController@komentar');
+Route::get('analytics/{id}', 'MainController@analytics');
+Route::get('profil/get/{role}/{status}', 'MainController@profil_get');
