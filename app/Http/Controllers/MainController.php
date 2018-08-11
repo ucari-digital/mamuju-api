@@ -27,12 +27,15 @@ class MainController extends Controller
 
             $data_response = [];
             foreach ($data as $item) {
-                $kategori = Kategori::where('id', $item->kode_kategori)->first()->nama_kategori;
-                if (empty($kategori)) {
-                    $kategori = '';
-                }
+                $kategori = Kategori::where('id', $item->kode_kategori)->first();
                 $data_arr = collect($item);
-                $data_arr->put('kategori', $kategori);
+                if (empty($kategori)) {
+                    $data_arr->put('kategori', '');
+                    $data_arr->put('kategori_color', '');
+                } else {
+                    $data_arr->put('kategori', $kategori->nama_kategori);
+                    $data_arr->put('kategori_color', $kategori->label_color);
+                }
                 $data_response[] = $data_arr;
             }
     		return Response::json($data_response, 'success fetch query', 'success', 200);
