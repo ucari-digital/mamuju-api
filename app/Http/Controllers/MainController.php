@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Helper\Response;
 use App\Model\Berita;
+use App\Model\Kategori;
 class MainController extends Controller
 {
 
@@ -23,7 +24,17 @@ class MainController extends Controller
             } else {
                 $data = $data->get();
             }
-    		return Response::json($data, 'success fetch query', 'success', 200);
+
+            foreach ($data as $item) {
+                $kategori = Kategori::where('id', $item->kode_kategori)->first()->nama_kategori;
+                if (empty($kategori)) {
+                    $kategori = '';
+                }
+                $data_arr = collect($item);
+                $data_arr->put('kategori', $kategori);
+            }
+            return $data_arr;
+    		// return Response::json($data, 'success fetch query', 'success', 200);
     	} catch (\Exception $e) {
     		return Response::json($e->getMessage(), 'Terjadi Kesahalan', 'failed', 500);
     	}
