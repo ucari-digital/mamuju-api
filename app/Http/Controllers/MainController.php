@@ -25,6 +25,7 @@ class MainController extends Controller
                 $data = $data->get();
             }
 
+            $data_response = [];
             foreach ($data as $item) {
                 $kategori = Kategori::where('id', $item->kode_kategori)->first()->nama_kategori;
                 if (empty($kategori)) {
@@ -32,9 +33,9 @@ class MainController extends Controller
                 }
                 $data_arr = collect($item);
                 $data_arr->put('kategori', $kategori);
+                $data_response[] = $data_arr;
             }
-            return $data_arr;
-    		// return Response::json($data, 'success fetch query', 'success', 200);
+    		return Response::json($data_response, 'success fetch query', 'success', 200);
     	} catch (\Exception $e) {
     		return Response::json($e->getMessage(), 'Terjadi Kesahalan', 'failed', 500);
     	}
