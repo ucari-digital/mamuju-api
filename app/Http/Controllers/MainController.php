@@ -49,6 +49,12 @@ class MainController extends Controller
 
         try {
             $data = Berita::where('id', $id)->where('seo', $seo)->first();
+
+            // Visitor Counter
+            Berita::where('id', $data->id)->update([
+                'visit' => $data->visit + 1
+            ]);
+            
             if(empty($data))
             {
                 return Response::json("not found", 'ID Berita Tidak Tersedia', 'failed', 404);
