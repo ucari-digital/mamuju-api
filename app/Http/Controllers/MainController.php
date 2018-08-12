@@ -66,6 +66,39 @@ class MainController extends Controller
         }
     }
 
+    public function populer(Request $request)
+    {
+        try {
+            $data = Berita::where('status', 'publish')
+            ->orderBy('visit', 'DESC')
+            ->take($request->take)
+            ->skip($request->skip);
+            
+            if ($request->kategori) {
+                $data = $data->where('kode_kategori', $request->kategori)->get();
+            } else {
+                $data = $data->get();
+            }
+
+            $data_response = [];
+            foreach ($data as $item) {
+                $kategori = Kategori::where('id', $item->kode_kategori)->first();
+                $data_arr = collect($item);
+                if (empty($kategori)) {
+                    $data_arr->put('kategori', '');
+                    $data_arr->put('kategori_color', ';');
+                } else {
+                    $data_arr->put('kategori', $kategori->nama_kategori);
+                    $data_arr->put('kategori_color', $kategori->label_color);
+                }
+                $data_response[] = $data_arr;
+            }
+            return Response::json($data_response, 'success fetch query', 'success', 200);
+        } catch (\Exception $e) {
+            return Response::json($e->getMessage(), 'Terjadi Kesahalan', 'failed', 500);
+        }
+    }
+
     public function news_search(Request $request)
     {
         try {
