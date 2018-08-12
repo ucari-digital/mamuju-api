@@ -31,7 +31,7 @@ class MainController extends Controller
                 $data_arr = collect($item);
                 if (empty($kategori)) {
                     $data_arr->put('kategori', '');
-                    $data_arr->put('kategori_color', '');
+                    $data_arr->put('kategori_color', ';');
                 } else {
                     $data_arr->put('kategori', $kategori->nama_kategori);
                     $data_arr->put('kategori_color', $kategori->label_color);
