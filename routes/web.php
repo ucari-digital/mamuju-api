@@ -15,8 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('headline', 'MainController@headline');
-
 Route::post('news', 'MainController@news');
 Route::get('news/{id}/{seo}', 'MainController@news_detail');
 Route::post('populer', 'MainController@populer');
