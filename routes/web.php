@@ -26,3 +26,5 @@ Route::get('komentar/{id}', 'MainController@komentar');
 Route::post('komentar', 'MainController@komentar_create');
 
 Route::post('profil', 'MainController@profil');
+
+Route::get('iklan/{id}', 'MainController@iklan');
