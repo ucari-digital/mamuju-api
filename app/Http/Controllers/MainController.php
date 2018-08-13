@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\Analytics;
+use App\Model\Iklan;
 use App\Model\Komentar;
 use App\User;
 use Illuminate\Http\Request;
@@ -44,22 +45,44 @@ class MainController extends Controller
     	}
     }
 
-    public function news_detail($id, $seo)
+    public function news_detail(Request $request, $id, $seo)
     {
-
         try {
-            $data = Berita::where('id', $id)->where('seo', $seo)->first();
-
+            $data = Berita::where('berita.id', $id)
+                ->where('seo', $seo)
+                ->first();
 
             if(empty($data))
             {
                 return Response::json("not found", 'ID Berita Tidak Tersedia', 'failed', 404);
             } else {
-                // Visitor Counter
-                Berita::where('id', $data->id)->update([
-                    'visit' => $data->visit + 1
-                ]);
+                $analytics = Analytics::select('berita_id', 'ip')
+                    ->where('berita_id', $id)
+                    ->where('ip', $request->ip())
+                    ->first();
+                if(empty($analytics))
+                {
+                    $simpan = new Analytics;
+                    $simpan->berita_id = $id;
+                    $simpan->url = url()->full();
+                    $simpan->ip = $request->ip();
+                    $simpan->unique = null;
+                    $simpan->save();
+
+                    // Visitor Counter
+                    Berita::where('id', $data->id)->update([
+                        'visit' => $data->visit + 1
+                    ]);
+                }
             }
+
+            $user_id = User::where('id', $data->user_id)->first();
+            $approved_by = User::where('id', $data->approved_by)->first();
+            $data = [
+                'news_detail' => $data,
+                'user_detail' => $user_id,
+                'approved_detail' => $approved_by
+            ];
             return Response::json($data, 'success fetch query', 'success', 200);
         } catch (\Exception $e) {
             return Response::json($e->getMessage(), 'Terjadi Kesahalan', 'failed', 500);
@@ -102,18 +125,12 @@ class MainController extends Controller
     public function news_search(Request $request)
     {
         try {
-            $data = Berita::where('status', 'publish')->where('judul', 'like', '%'.$request->judul.'%')->orderBy('created_at', 'DESC')->get();
-
-            $data_response = [];
-            foreach ($data as $item) {
-                $tags = Berita::where('tags', 'like', '%'.$item->tags.'%')->first();
-                if (empty($tags)) {
-                    $tags = '';
-                }
-                $data_arr = collect($item);
-                $data_arr->put('kategori', $tags);
-                $data_response[] = $data_arr;
-            }
+            $data = Berita::where('status', 'publish')
+                >where(function ($query) use ($request) {
+                    $query->where('judul', 'like', '%'.$request->judul.'%')
+                        ->where('tags', 'like', '%'.$request->tags.'%');
+                })->orderBy('created_at', 'DESC')
+                    ->get();
             return Response::json($data, 'success fetch query', 'success', 200);
         } catch (\Exception $e) {
             return Response::json($e->getMessage(), 'Terjadi Kesahalan', 'failed', 500);
@@ -152,7 +169,7 @@ class MainController extends Controller
         }
     }
 
-    public function analytics(Request $request, $id)
+    public function analytics($id)
     {
         try {
             $berita = Berita::select('id')->where('id', $id)->first();
@@ -172,6 +189,21 @@ class MainController extends Controller
     {
         try {
             $data = User::where('role', $request->role)->where('status', $request->status)->orderBy('created_at', 'DESC')->get();
+            return Response::json($data, 'success fetch query', 'success', 200);
+        } catch (\Exception $e) {
+            return Response::json($e->getMessage(), 'Terjadi Kesahalan', 'failed', 500);
+        }
+    }
+
+    public function iklan($id)
+    {
+        try {
+            $data = Iklan::select('iklan.*', 'users.name as users_name')->join('users', 'users.id', '=', 'iklan.user_id')->orderBy('iklan.created_at', 'DESC');
+            if ($id = null) {
+                $data = $data->get();
+            } else {
+                $data = $data->where('iklan.id', $id)->first();
+            }
             return Response::json($data, 'success fetch query', 'success', 200);
         } catch (\Exception $e) {
             return Response::json($e->getMessage(), 'Terjadi Kesahalan', 'failed', 500);

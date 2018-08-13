@@ -27,5 +27,7 @@ Route::post('komentar', 'MainController@komentar_create');
 
 Route::post('profil', 'MainController@profil');
 
+Route::get('iklan/{id}', 'MainController@iklan');
+
 Route::get('kategori', 'KategoriController@kategori');
-Route::post('kategori/find', 'KategoriController@kategori_finder');
+Route::post('kategori/find', 'KategoriController@kategori_finder')
