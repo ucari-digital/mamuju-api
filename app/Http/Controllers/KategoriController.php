@@ -18,6 +18,28 @@ class KategoriController extends Controller
     	}
     }
 
+    public function kategori_menu()
+    {
+        try {
+            $kategori = Kategori::where('is_deleted', 'N')->get();
+            $numb = 0;
+            $loop = 0;
+            foreach ($kategori as $item) {
+                if ($numb < 4) {
+                    $data[$loop][] = $item;
+                    $numb += 1;
+                    if ($numb == 3) {
+                        $numb = 0;
+                        $loop += 1;
+                    }
+                }
+            }
+            return Response::json($data, 'success fetch query', 'success', 200);
+        } catch (\Exception $e) {
+            return Response::json($e->getMessage(), 'Terjadi Kesahalan', 'failed', 500);
+        }
+    }
+
     public function kategori_finder(Request $request)
     {
     	try {
