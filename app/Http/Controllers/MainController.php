@@ -153,9 +153,8 @@ class MainController extends Controller
         try {
             $simpan = new Komentar;
             $simpan->berita_id = $request->berita_id;
-            $simpan->url = $request->url;
-            $simpan->ip = $request->ip;
-            $simpan->unique = $request->unique;
+            $simpan->user_id = $request->user_id;
+            $simpan->komentar = $request->komentar;
             $simpan->save();
 
             return Response::json($simpan, 'success insert data', 'success', 200);
