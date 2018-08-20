@@ -73,10 +73,17 @@ class MainController extends Controller
 
             $user_id = User::where('id', $data->user_id)->first();
             $approved_by = User::where('id', $data->approved_by)->first();
+            $komentar = DB::table('komentar')
+            ->join('users', 'komentar.user_id', '=', 'users.id')
+            ->select('komentar.*', 'users.name', 'users.avatar')
+            ->take(3)
+            ->orderBy('created_at', 'DESC')
+            ->get();
             $data = [
                 'news_detail' => $data,
                 'user_detail' => $user_id,
-                'approved_detail' => $approved_by
+                'approved_detail' => $approved_by,
+                'komentar' => $komentar
             ];
             return Response::json($data, 'success fetch query', 'success', 200);
         } catch (\Exception $e) {
