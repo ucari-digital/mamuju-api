@@ -141,7 +141,7 @@ class MainController extends Controller
                 return Response::json("not found", 'ID Berita Tidak Tersedia', 'failed', 404);
             }
 
-            $data = Komentar::where('berita_id', $id)->orderBy('created_at', 'DESC')->get();
+            $data = Komentar::where('berita_id', $id)->orderBy('created_at', 'DESC')->paginate(10);
             return Response::json($data, 'success fetch query', 'success', 200);
         } catch (\Exception $e) {
             return Response::json($e->getMessage(), 'Terjadi Kesahalan', 'failed', 500);
