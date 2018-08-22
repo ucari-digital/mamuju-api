@@ -15,6 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('login', 'Auth\LoginController@login');
+Route::post('register', 'Auth\RegisterController@register');
+
 Route::post('news', 'MainController@news');
 Route::get('news/{id}/{seo}', 'MainController@news_detail');
 Route::post('populer', 'MainController@populer');
