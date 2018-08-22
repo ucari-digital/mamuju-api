@@ -18,6 +18,8 @@ Route::get('/', function () {
 Route::post('login', 'Auth\LoginController@login');
 Route::post('register', 'Auth\RegisterController@register');
 
+Route::post('user', 'UserController@user');
+
 Route::post('news', 'MainController@news');
 Route::get('news/{id}/{seo}', 'MainController@news_detail');
 Route::post('populer', 'MainController@populer');
@@ -27,8 +29,6 @@ Route::get('analytics/{id}', 'MainController@analytics');
 
 Route::get('komentar/{id}', 'MainController@komentar');
 Route::post('komentar', 'MainController@komentar_create');
-
-Route::post('profil', 'MainController@profil');
 
 Route::get('iklan/{id}', 'MainController@iklan');
 

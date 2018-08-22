@@ -186,16 +186,6 @@ class MainController extends Controller
         }
     }
 
-    public function profil(Request $request)
-    {
-        try {
-            $data = User::where('role', $request->role)->where('status', $request->status)->orderBy('created_at', 'DESC')->get();
-            return Response::json($data, 'success fetch query', 'success', 200);
-        } catch (\Exception $e) {
-            return Response::json($e->getMessage(), 'Terjadi Kesahalan', 'failed', 500);
-        }
-    }
-
     public function iklan($id)
     {
         try {

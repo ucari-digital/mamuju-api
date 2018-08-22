@@ -77,6 +77,7 @@ class RegisterController extends Controller
     {
         $data = new Users;
         $data->name = $request->name;
+        $data->nickname = str_slug($request->name, '-').'-'.rand(000,999);
         $data->email = $request->email;
         $data->password = Hash::make($request->password);
         $data->position = 'pengguna';
