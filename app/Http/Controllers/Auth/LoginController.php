@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Hash;
+use App\Helper\Response;
 
+use App\Model\Users;
 class LoginController extends Controller
 {
     /*
@@ -32,8 +36,23 @@ class LoginController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    // public function __construct()
+    // {
+    //     $this->middleware('guest')->except('logout');
+    // }
+
+    public function login(Request $request)
     {
-        $this->middleware('guest')->except('logout');
+        $user = Users::where('email', $request->email)->first();
+
+        if (!$user) {
+            return Response::json('', 'pengguna tidak ditemukan', 'failed', 403);
+        }
+
+        if (Hash::check($request->password, $user->password)) {
+            return Response::json($user, 'login berhasil', 'success', 200);
+        } else {
+            return Response::json('', 'pengguna tidak ditemukan', 'failed', 403);
+        }
     }
 }
