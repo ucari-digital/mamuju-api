@@ -74,8 +74,10 @@ class MainController extends Controller
             $user_id = User::where('id', $data->user_id)->first();
             $approved_by = User::where('id', $data->approved_by)->first();
             $komentar = DB::table('komentar')
+            ->join('berita', 'komentar.berita_id', '=', 'berita.id')
             ->join('users', 'komentar.user_id', '=', 'users.id')
-            ->select('komentar.*', 'users.name', 'users.avatar')
+            ->select('komentar.*', 'users.avatar', 'users.name')
+            ->where('komentar.berita_id', $id)
             ->take(3)
             ->orderBy('created_at', 'DESC')
             ->get();
