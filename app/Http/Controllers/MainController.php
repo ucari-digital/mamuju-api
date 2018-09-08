@@ -129,12 +129,14 @@ class MainController extends Controller
     public function news_search(Request $request)
     {
         try {
-            $data = Berita::where('status', 'publish')
-                >where(function ($query) use ($request) {
-                    $query->where('judul', 'like', '%'.$request->judul.'%')
-                        ->where('tags', 'like', '%'.$request->tags.'%');
-                })->orderBy('created_at', 'DESC')
-                    ->get();
+            $data = Berita::select('berita.*', 'kategori.nama_kategori as kategori', 'kategori.label_color as kategori_color')
+                ->join('kategori', 'kategori.id', '=', 'berita.kode_kategori')
+                ->where('status', 'publish')
+                ->where('judul', 'like', '%'.$request->text.'%')
+                ->orWhere('tags', 'like', '%'.$request->text.'%')
+                ->orderBy('berita.created_at', 'DESC')
+                ->get();
+
             return Response::json($data, 'success fetch query', 'success', 200);
         } catch (\Exception $e) {
             return Response::json($e->getMessage(), 'Terjadi Kesahalan', 'failed', 500);
