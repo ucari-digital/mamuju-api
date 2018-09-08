@@ -82,7 +82,7 @@ class RegisterController extends Controller
         $data->password = Hash::make($request->password);
         $data->position = 'pengguna';
         $data->role = 'user';
-        $data->avatar = 'images/avatar/default-avatar.png';
+        $data->avatar = 'images/avatar/default-avatar.svg';
         $data->status = 'active';
         $data->save();
 

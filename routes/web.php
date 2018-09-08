@@ -37,3 +37,6 @@ Route::post('kategori/find', 'KategoriController@kategori_finder');
 Route::post('kategori/menu', 'KategoriController@kategori_menu');
 
 Route::get('iklan/{id}', 'MainController@iklan');
+
+Route::post('subscribe', 'SubscribeController@subscribe');
+Route::post('unsubscribe', 'SubscribeController@un_subscribe');
