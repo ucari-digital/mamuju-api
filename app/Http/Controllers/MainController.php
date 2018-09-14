@@ -22,6 +22,7 @@ class MainController extends Controller
     		$data = DB::table('berita')
             ->join('kategori', 'berita.kode_kategori', '=', 'kategori.id')
             ->select('berita.*', 'kategori.nama_kategori as kategori', 'kategori.label_color as kategori_color')
+            ->where('berita.status', "publish")
             ->take($request->take)
             ->skip($request->skip)
             ->orderBy('created_at', 'DESC');
