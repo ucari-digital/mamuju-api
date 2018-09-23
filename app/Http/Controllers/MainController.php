@@ -132,14 +132,14 @@ class MainController extends Controller
         }
     }
 
-    public function news_search(Request $request)
+    public function news_search($value)
     {
         try {
             $data = Berita::select('berita.*', 'kategori.nama_kategori as kategori', 'kategori.label_color as kategori_color')
                 ->join('kategori', 'kategori.id', '=', 'berita.kode_kategori')
                 ->where('status', 'publish')
-                ->where('judul', 'like', '%'.$request->text.'%')
-                ->orWhere('tags', 'like', '%'.$request->text.'%')
+                ->where('judul', 'like', '%'.$value.'%')
+                ->orWhere('tags', 'like', '%'.$value.'%')
                 ->orderBy('berita.created_at', 'DESC')
                 ->get();
 

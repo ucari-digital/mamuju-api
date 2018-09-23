@@ -24,7 +24,7 @@ Route::post('news', 'MainController@news');
 Route::get('news/{id}/{seo}', 'MainController@news_detail');
 Route::post('populer', 'MainController@populer');
 
-Route::post('news/search', 'MainController@news_search');
+Route::get('news/{value}', 'MainController@news_search');
 Route::get('analytics/{id}', 'MainController@analytics');
 
 Route::get('komentar/{id}', 'MainController@komentar');
