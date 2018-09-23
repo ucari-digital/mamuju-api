@@ -138,8 +138,10 @@ class MainController extends Controller
             $data = Berita::select('berita.*', 'kategori.nama_kategori as kategori', 'kategori.label_color as kategori_color')
                 ->join('kategori', 'kategori.id', '=', 'berita.kode_kategori')
                 ->where('status', 'publish')
-                ->where('judul', 'like', '%'.$value.'%')
-                ->orWhere('tags', 'like', '%'.$value.'%')
+                ->where(function ($query) use ($value) {
+                    $query->where('judul', 'like', '%'.$value.'%')
+                        ->orWhere('tags', 'like', '%'.$value.'%');
+                })
                 ->orderBy('berita.created_at', 'DESC')
                 ->get();
 
