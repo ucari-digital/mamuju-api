@@ -82,11 +82,16 @@ class MainController extends Controller
             ->take(3)
             ->orderBy('created_at', 'DESC')
             ->get();
+            $sum_komentar = DB::table('komentar')
+                ->select('id')
+                ->where('berita_id', $id)
+                ->count();
             $data = [
                 'news_detail' => $data,
                 'user_detail' => $user_id,
                 'approved_detail' => $approved_by,
-                'komentar' => $komentar
+                'komentar' => $komentar,
+                'sum_komentar' => $sum_komentar
             ];
             return Response::json($data, 'success fetch query', 'success', 200);
         } catch (\Exception $e) {
