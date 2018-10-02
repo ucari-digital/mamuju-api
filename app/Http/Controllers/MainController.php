@@ -79,7 +79,6 @@ class MainController extends Controller
             ->join('users', 'komentar.user_id', '=', 'users.id')
             ->select('komentar.*', 'users.avatar', 'users.name')
             ->where('komentar.berita_id', $id)
-            ->take(3)
             ->orderBy('created_at', 'DESC')
             ->get();
             $sum_komentar = DB::table('komentar')
